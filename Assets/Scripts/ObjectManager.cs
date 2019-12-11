@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CubeManager : MonoBehaviour
+public class ObjectManager : MonoBehaviour
 {
     static int maxObject = 5;
-    const int maxArrayCubes = 7;
+    const int maxArrayObjects = 7;
 
     float spawnTimer = 5.0f;
     float enoughTimer = 3.0f;
     int nbObject = maxObject - 1;
     int score = 0;
-    public GameObject cube;
-    public GameObject heavyCube;
-    GameObject[] cubes;
+    public GameObject normalObject;
+    public GameObject heavyObject;
+    GameObject[] objects;
 
     public Text displayNbObject;
     public Text destress;
@@ -24,7 +24,7 @@ public class CubeManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cubes = new GameObject[maxArrayCubes] { cube, cube, cube, cube , cube , heavyCube , cube };
+        objects = new GameObject[maxArrayObjects] { normalObject, normalObject, normalObject, normalObject , normalObject , heavyObject , normalObject };
         displayNbObject.text = nbObject.ToString();
         destress.canvasRenderer.SetAlpha(0f);
         displayBalanceTimer.canvasRenderer.SetAlpha(0f);
@@ -37,12 +37,12 @@ public class CubeManager : MonoBehaviour
 
         if (nbObject > 0 && GameObject.Find("BalancePad"))
         {
-            SpawnCube();
+            SpawnObject();
         }
 
-        FallCube();
+        FallObject();
 
-        if (HasEnoughCube())
+        if (HasEnoughObject())
         {
             score += maxObject;
             maxObject += (maxObject/2);
@@ -57,15 +57,15 @@ public class CubeManager : MonoBehaviour
         }
     }
 
-    public void SpawnCube()
+    public void SpawnObject()
     {
         spawnTimer -= Time.deltaTime;
         if (spawnTimer < 0)
         {
             spawnTimer = 5.0f;
-            var cube_spawned = Instantiate(cubes[Random.Range(0,maxArrayCubes)], new Vector3(Random.Range(-5, 5), 4, 0), Quaternion.identity);
-            cube_spawned.transform.SetParent(transform);
-            cube_spawned.name = "Cube";
+            var object_spawned = Instantiate(objects[Random.Range(0,maxArrayObjects)], new Vector3(Random.Range(-5, 5), 4, 0), Quaternion.identity);
+            object_spawned.transform.SetParent(transform);
+            object_spawned.name = "Object";
 
             nbObject -= 1;
 
@@ -73,7 +73,7 @@ public class CubeManager : MonoBehaviour
     }
 
 
-    public int CountCube()
+    public int CountObject()
     {
         int count = 0;
         foreach(Transform child in transform)
@@ -86,10 +86,10 @@ public class CubeManager : MonoBehaviour
         return count;
     }
 
-    public bool HasEnoughCube()
+    public bool HasEnoughObject()
     {
-        bool enoughCube = false;
-        if (CountCube() == maxObject)
+        bool enoughObject = false;
+        if (CountObject() == maxObject)
         {
             BalanceTimer(3);
             enoughTimer -= Time.deltaTime;
@@ -104,7 +104,7 @@ public class CubeManager : MonoBehaviour
                 foreach (Transform child in transform)
                 {
                     Destroy(child.gameObject);
-                    enoughCube = true;
+                    enoughObject = true;
                     
                 }
             }
@@ -116,7 +116,7 @@ public class CubeManager : MonoBehaviour
             }
             enoughTimer = 3.0f;
         }
-        return enoughCube;
+        return enoughObject;
     }
 
     public void BalanceTimer(int value)
@@ -129,7 +129,7 @@ public class CubeManager : MonoBehaviour
 
     }
 
-    public void FallCube()
+    public void FallObject()
     {
         foreach(Transform child in transform)
         {

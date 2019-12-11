@@ -15,7 +15,7 @@ public class RetryButton : MonoBehaviour
 
     void ResetGame()
     {
-        GameObject.Find("Cubes").GetComponent<CubeManager>().ResetObject();
+        GameObject.Find("Objects").GetComponent<ObjectManager>().ResetObject();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
